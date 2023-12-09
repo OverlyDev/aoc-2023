@@ -22,6 +22,9 @@ func GetDigitsFromString(s string) int {
 	return final
 }
 
+// We need to replace (word)numbers with (digit)numbers
+// The tricky part is when first/last characters overlap
+// That's why we just put the representative (digit)number in the middle of the (word)number
 var replacements = map[string]string{
 	"one":   "o1e",
 	"two":   "t2o",
@@ -34,6 +37,7 @@ var replacements = map[string]string{
 	"nine":  "ni9ne",
 }
 
+// Replace (word)numbers with (digit)numbers first, then GetDigitsFromString
 func GetFancyDigitsFromString(s string) int {
 	for word, num := range replacements {
 		re := regexp.MustCompile(word)
