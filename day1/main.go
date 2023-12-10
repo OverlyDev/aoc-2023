@@ -1,31 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 
+	"github.com/OverlyDev/aoc-2023/day1/files"
 	"github.com/OverlyDev/aoc-2023/day1/numbers"
 )
-
-func getLinesFromFile(filename string) []string {
-	// Open the file
-	f, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
-	// Setup some things
-	scanner := bufio.NewScanner(f)
-	result := []string{}
-
-	// Read lines to slice
-	for scanner.Scan() {
-		result = append(result, scanner.Text())
-	}
-	return result
-}
 
 func partOne(lines []string) {
 	total := 0
@@ -44,7 +24,7 @@ func partTwo(lines []string) {
 }
 
 func main() {
-	lines := getLinesFromFile("input.txt")
+	lines := files.GetLinesFromFile("input.txt")
 	partOne(lines)
 	partTwo(lines)
 }
