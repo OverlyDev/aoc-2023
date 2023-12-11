@@ -140,8 +140,74 @@ func (suite *GameValidSuite) TestSumGameIds() {
 	assert.Equal(suite.T(), suite.ExpectedIdSum, game.SumGameIds(games))
 }
 
+type GameMinBagSuite struct {
+	suite.Suite
+	GameStrings    []string
+	ExpectedMinBag []game.BagContents
+}
+
+func (suite *GameMinBagSuite) SetupTest() {
+	suite.GameStrings = testGames
+	suite.ExpectedMinBag = []game.BagContents{
+		{Red: 4, Green: 2, Blue: 6},
+		{Red: 1, Green: 3, Blue: 4},
+		{Red: 20, Green: 13, Blue: 6},
+		{Red: 14, Green: 3, Blue: 15},
+		{Red: 6, Green: 3, Blue: 2},
+	}
+}
+
+// Test getting minimum bag contents
+func (suite *GameMinBagSuite) TestGetMinBag() {
+	games := make([]game.Game, len(suite.GameStrings))
+	for i, s := range suite.GameStrings {
+		games[i] = game.CreateGame(s, game.BagContents{})
+	}
+
+	for i, x := range games {
+		assert.Equal(suite.T(), suite.ExpectedMinBag[i], x.GetMinBag())
+	}
+}
+
+type GamePowerSuite struct {
+	suite.Suite
+	GameStrings   []string
+	ExpectedPower []int
+	ExpectedSum   int
+}
+
+func (suite *GamePowerSuite) SetupTest() {
+	suite.GameStrings = testGames
+	suite.ExpectedPower = []int{48, 12, 1560, 630, 36}
+	suite.ExpectedSum = 2286
+}
+
+// Test getting power of each minimum bag contents
+func (suite *GamePowerSuite) TestGetMinBagPower() {
+	games := make([]game.Game, len(suite.GameStrings))
+	for i, s := range suite.GameStrings {
+		games[i] = game.CreateGame(s, game.BagContents{})
+	}
+
+	for i, x := range games {
+		assert.Equal(suite.T(), suite.ExpectedPower[i], x.GetMinBag().GetPower())
+	}
+}
+
+// Test getting sum of bag power
+func (suite *GamePowerSuite) TestGetPowerSum() {
+	games := make([]game.Game, len(suite.GameStrings))
+	for i, s := range suite.GameStrings {
+		games[i] = game.CreateGame(s, game.BagContents{})
+	}
+
+	assert.Equal(suite.T(), suite.ExpectedSum, game.GetPowerSum(games))
+}
+
 func TestGame(t *testing.T) {
 	suite.Run(t, new(GameIdSuite))
 	suite.Run(t, new(HandSuite))
 	suite.Run(t, new(GameValidSuite))
+	suite.Run(t, new(GameMinBagSuite))
+	suite.Run(t, new(GamePowerSuite))
 }

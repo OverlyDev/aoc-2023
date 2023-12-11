@@ -22,6 +22,11 @@ type BagContents struct {
 	Blue  int
 }
 
+// Returns bag colors multiplied together
+func (b BagContents) GetPower() int {
+	return b.Red * b.Blue * b.Green
+}
+
 // Holds a single "handful result"
 type Hand struct {
 	Red   int
@@ -34,6 +39,26 @@ type Game struct {
 	Id    int
 	Valid bool
 	Hands []Hand
+}
+
+// Calculates what the minimum bag could be for a given game
+func (g *Game) GetMinBag() BagContents {
+	bag := BagContents{}
+	for _, x := range g.Hands {
+
+		if x.Red > bag.Red {
+			bag.Red = x.Red
+		}
+
+		if x.Green > bag.Green {
+			bag.Green = x.Green
+		}
+
+		if x.Blue > bag.Blue {
+			bag.Blue = x.Blue
+		}
+	}
+	return bag
 }
 
 // Creates slice of Game from given slice of game strings
@@ -59,7 +84,6 @@ func CreateGame(s string, b BagContents) Game {
 			g.Valid = false
 		}
 	}
-
 	return g
 }
 
@@ -106,7 +130,6 @@ func GetHandsFromString(s string) []Hand {
 
 		hands[i] = hand
 	}
-
 	return hands
 }
 
@@ -123,7 +146,6 @@ func ValidHand(hand Hand, bag BagContents) bool {
 	if hand.Blue > bag.Blue {
 		return false
 	}
-
 	return true
 }
 
@@ -135,6 +157,14 @@ func SumGameIds(games []Game) int {
 			total += x.Id
 		}
 	}
+	return total
+}
 
+// Get the sum of all games' minimum bag
+func GetPowerSum(games []Game) int {
+	total := 0
+	for _, x := range games {
+		total += x.GetMinBag().GetPower()
+	}
 	return total
 }
